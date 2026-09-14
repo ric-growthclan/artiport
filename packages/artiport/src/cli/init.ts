@@ -72,7 +72,7 @@ export async function init(target: string, options: InitOptions = {}): Promise<I
     }),
     'middleware.ts': `export { default } from 'artiport/middleware';\n`,
     ...Object.fromEntries(API_ROUTES.map(([route, method]) => [`api/${route}.ts`, `export { ${method} } from 'artiport/api/${route}';\n`])),
-    '.gitignore': ['node_modules/', 'dist/', '.artiport/', '.artiport-data/', '.vercel/', '.env', '.env.*', '!.env.example', ''].join('\n'),
+    '.gitignore': ['node_modules/', 'dist/', '.artiport/', '.artiport-data/', '.vercel/', '.env', '.env.*', '!.env.example', '.DS_Store', ''].join('\n'),
     '.env.example': ENV_EXAMPLE,
     'sections/.gitkeep': '',
     'README.md': readme(title),
