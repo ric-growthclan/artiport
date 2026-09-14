@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Habits</title>
+<style>
+  :root {
+    --bg: #f7f6f2; --card: #ffffff; --ink: #1f1d1a; --muted: #77736a; --line: #e6e2d8;
+    --accent: #2f9e44; --ring: #d3f0db;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #121211; --card: #1c1b19; --ink: #efece4; --muted: #a29e93; --line: #2e2b27;
+      --accent: #51cf66; --ring: #1f3b27;
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 580px; margin: 0 auto; padding: 24px 16px 48px; }
+  h1 { margin: 0 0 4px; font-size: 26px; letter-spacing: -0.02em; }
+  .sub { margin: 0 0 20px; color: var(--muted); }
+  .card { padding: 4px 14px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); }
+  .row { display: grid; grid-template-columns: minmax(0, 1fr) repeat(7, 34px); align-items: center; gap: 2px; padding: 10px 0; border-top: 1px solid var(--line); }
+  .row:first-child { border-top: 0; }
+  .head { color: var(--muted); font-size: 12px; text-align: center; }
+  .name { display: flex; flex-direction: column; min-width: 0; padding-right: 8px; }
+  .name strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .name small { color: var(--muted); }
+  .day { display: grid; place-items: center; width: 30px; height: 30px; margin: 0 auto; padding: 0; border: 1.5px solid var(--line); border-radius: 9px; background: transparent; color: transparent; font-size: 15px; cursor: pointer; }
+  .day.on { border-color: var(--accent); background: var(--accent); color: #fff; }
+  .day.today { box-shadow: 0 0 0 3px var(--ring); }
+  .remove { align-self: flex-start; padding: 0; border: 0; background: none; color: var(--muted); font-size: 12px; cursor: pointer; }
+  form { display: flex; gap: 8px; margin-top: 16px; }
+  input { flex: 1; min-width: 0; padding: 11px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: inherit; font: inherit; }
+  .add { padding: 0 18px; border: 0; border-radius: 12px; background: var(--ink); color: var(--bg); font: inherit; font-weight: 600; cursor: pointer; }
+  .empty { padding: 24px 0; color: var(--muted); text-align: center; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Habits</h1>
+  <p class="sub" id="summary"></p>
+  <div class="card" id="grid"></div>
+  <form id="form">
+    <input id="habit" placeholder="New habit, e.g. Walk 20 minutes" maxlength="60" required>
+    <button class="add">Add</button>
+  </form>
+</main>
+<script>
+  // Saved the way many Claude Code artifacts do it: one JSON blob in localStorage.
+  const KEY = 'habits-v1';
+
+  function load() {
+    try {
+      return JSON.parse(localStorage.getItem(KEY)) || { habits: [], done: {} };
+    } catch {
+      return { habits: [], done: {} };
+    }
+  }
+
+  let state = load();
+  const save = () => localStorage.setItem(KEY, JSON.stringify(state));
+
+  const dateKey = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+  function lastSevenDays() {
+    const today = new Date();
+    today.setHours(12, 0, 0, 0);
+    return Array.from({ length: 7 }, (_, i) => {
+      const day = new Date(today);
+      day.setDate(today.getDate() - 6 + i);
+      return day;
+    });
+  }
+
+  function streak(id) {
+    let count = 0;
+    const day = new Date();
+    day.setHours(12, 0, 0, 0);
+    while (state.done[`${id}:${dateKey(day)}`]) {
+      count++;
+      day.setDate(day.getDate() - 1);
+    }
+    return count;
+  }
+
+  function el(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  function render() {
+    const days = lastSevenDays();
+    const today = dateKey(new Date());
+    const grid = document.getElementById('grid');
+    grid.replaceChildren();
+
+    if (state.habits.length === 0) {
+      grid.append(el('p', 'empty', 'Add a habit to start tracking.'));
+    } else {
+      const head = el('div', 'row');
+      head.append(el('span'), ...days.map((d) => el('span', 'head', d.toLocaleDateString(undefined, { weekday: 'narrow' }))));
+      grid.append(head);
+
+      for (const habit of state.habits) {
+        const row = el('div', 'row');
+        const name = el('div', 'name');
+        const days_ = streak(habit.id);
+        const remove = el('button', 'remove', 'Remove');
+        remove.type = 'button';
+        remove.onclick = () => {
+          if (!confirm(`Remove “${habit.name}”?`)) return;
+          state.habits = state.habits.filter((h) => h.id !== habit.id);
+          save();
+          render();
+        };
+        name.append(el('strong', '', habit.name), el('small', '', days_ ? `${days_}-day streak` : 'No streak yet'), remove);
+        row.append(name);
+
+        for (const day of days) {
+          const key = `${habit.id}:${dateKey(day)}`;
+          const button = el('button', 'day', '✓');
+          button.type = 'button';
+          button.classList.toggle('on', Boolean(state.done[key]));
+          button.classList.toggle('today', dateKey(day) === today);
+          button.setAttribute('aria-pressed', String(Boolean(state.done[key])));
+          button.setAttribute('aria-label', `${habit.name}, ${day.toDateString()}`);
+          button.onclick = () => {
+            if (state.done[key]) delete state.done[key];
+            else state.done[key] = true;
+            save();
+            render();
+          };
+          row.append(button);
+        }
+        grid.append(row);
+      }
+    }
+
+    const doneToday = state.habits.filter((h) => state.done[`${h.id}:${today}`]).length;
+    document.getElementById('summary').textContent = state.habits.length
+      ? `${doneToday} of ${state.habits.length} done today`
+      : 'Small habits, one day at a time.';
+  }
+
+  document.getElementById('form').onsubmit = (event) => {
+    event.preventDefault();
+    const input = document.getElementById('habit');
+    const name = input.value.trim();
+    if (!name) return;
+    state.habits.push({ id: Math.random().toString(36).slice(2, 9), name });
+    input.value = '';
+    save();
+    render();
+  };
+
+  render();
+</script>
+</body>
+</html>

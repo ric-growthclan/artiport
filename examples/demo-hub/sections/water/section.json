@@ -1,0 +1,27 @@
+{
+  "slug": "water",
+  "title": "Water",
+  "emoji": "💧",
+  "format": "react",
+  "source": {
+    "kind": "chat"
+  },
+  "hash": "bc2def5b40ff2eb707824d71067900ecf9177754bc8dc880eb1ae47b87bf63ee",
+  "detection": {
+    "kind": "react",
+    "apis": [
+      "window.storage"
+    ],
+    "capabilities": [],
+    "imports": [
+      "react"
+    ],
+    "storageKeys": [
+      "water-v1"
+    ],
+    "externalAssets": [],
+    "warnings": []
+  },
+  "addedAt": "2026-09-14T05:33:09.393Z",
+  "updatedAt": "2026-09-14T05:33:09.393Z"
+}

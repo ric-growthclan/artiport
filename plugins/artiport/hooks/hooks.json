@@ -1,0 +1,17 @@
+{
+  "description": "Offer to update the artiport hub when a published artifact is one of its sections",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Artifact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/artifact-published.mjs\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

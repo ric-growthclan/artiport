@@ -1,0 +1,23 @@
+{
+  "slug": "reading-list",
+  "title": "Reading list",
+  "emoji": "📚",
+  "source": {
+    "kind": "chat"
+  },
+  "hash": "2a327d0b11484212cd16b75989df3c627254f18f4c0fe3b4c5c1ecbc5da2d4da",
+  "detection": {
+    "kind": "html",
+    "apis": [
+      "window.storage"
+    ],
+    "capabilities": [],
+    "storageKeys": [
+      "books"
+    ],
+    "externalAssets": [],
+    "warnings": []
+  },
+  "addedAt": "2026-09-14T04:13:44.474Z",
+  "updatedAt": "2026-09-14T04:13:44.474Z"
+}

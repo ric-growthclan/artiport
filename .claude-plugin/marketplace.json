@@ -1,0 +1,17 @@
+{
+  "name": "artiport",
+  "owner": {
+    "name": "artiport contributors"
+  },
+  "metadata": {
+    "description": "Turn your Claude artifacts into sections of one personal PWA on Vercel",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "artiport",
+      "source": "./plugins/artiport",
+      "description": "Set up a personal artiport hub, add Claude artifacts as sections and keep them in sync when the artifacts change"
+    }
+  ]
+}

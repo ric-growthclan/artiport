@@ -1,0 +1,14 @@
+node_modules/
+dist/
+coverage/
+.vercel/
+.env
+.env.*
+!.env.example
+.artiport-data/
+# Personal artifacts waiting to be imported: never part of the public repo
+inbox/
+playwright-report/
+test-results/
+*.log
+.DS_Store

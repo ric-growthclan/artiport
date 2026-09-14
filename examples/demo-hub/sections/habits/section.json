@@ -1,0 +1,23 @@
+{
+  "slug": "habits",
+  "title": "Habits",
+  "emoji": "✅",
+  "source": {
+    "kind": "file"
+  },
+  "hash": "9416b87199875f4b23c7d664bd1d40fffb36fc38a243ffc1128c9cdb7cd570c4",
+  "detection": {
+    "kind": "html",
+    "apis": [
+      "localStorage"
+    ],
+    "capabilities": [],
+    "storageKeys": [
+      "habits-v1"
+    ],
+    "externalAssets": [],
+    "warnings": []
+  },
+  "addedAt": "2026-09-14T04:13:44.355Z",
+  "updatedAt": "2026-09-14T04:13:44.355Z"
+}

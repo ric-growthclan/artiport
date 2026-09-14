@@ -1,0 +1,13 @@
+{
+  "name": "demo-hub",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "artiport dev",
+    "build": "artiport build",
+    "doctor": "artiport doctor"
+  },
+  "dependencies": {
+    "artiport": "^0.1.0"
+  }
+}

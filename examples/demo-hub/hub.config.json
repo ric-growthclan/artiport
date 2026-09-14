@@ -1,0 +1,12 @@
+{
+  "title": "Demo hub",
+  "shortName": "Demo hub",
+  "lang": "en",
+  "themeColor": "#4c6ef5",
+  "backgroundColor": "#f6f5f1",
+  "sections": [
+    "habits",
+    "reading-list",
+    "water"
+  ]
+}

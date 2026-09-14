@@ -1,0 +1,14 @@
+{
+  "name": "artiport-monorepo",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "examples/demo-hub"
+  ],
+  "scripts": {
+    "build": "npm run build -w artiport",
+    "test": "npm test -w artiport",
+    "typecheck": "npm run typecheck -w artiport"
+  }
+}

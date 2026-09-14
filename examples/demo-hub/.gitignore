@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.artiport/
+.artiport-data/
+.vercel/
+.env
+.env.*
+!.env.example

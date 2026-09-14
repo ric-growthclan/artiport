@@ -1,0 +1,63 @@
+{
+  "name": "artiport",
+  "version": "0.1.0",
+  "description": "Turn your Claude artifacts into sections of one personal PWA on Vercel, synced to JSON files in a private GitHub repo. No database.",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ric-growthclan/artiport.git",
+    "directory": "packages/artiport"
+  },
+  "keywords": [
+    "claude",
+    "artifacts",
+    "pwa",
+    "vercel",
+    "local-first",
+    "github"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "artiport": "./dist/cli/index.js"
+  },
+  "files": [
+    "dist",
+    "templates",
+    "README.md"
+  ],
+  "exports": {
+    "./middleware": {
+      "types": "./dist/middleware.d.ts",
+      "import": "./dist/middleware.js"
+    },
+    "./api/*": {
+      "types": "./dist/api/*.d.ts",
+      "import": "./dist/api/*.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.sw.json"
+  },
+  "dependencies": {
+    "@vercel/functions": "^3.9.7",
+    "esbuild": "^0.28.2",
+    "postcss": "^8.5.28",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^3.4.19"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "happy-dom": "^20.14.5",
+    "tsup": "^8.5.1",
+    "typescript": "~5.9.3",
+    "vitest": "^5.0.0"
+  }
+}
